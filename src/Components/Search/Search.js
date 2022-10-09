@@ -15,7 +15,7 @@ const Search = () => {
             <div className='flex-1'>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="flex flex-wrap items-center">
-                            {/* ------------------ Product Name ------------------ */}
+                            {/* ------------------ From Enrollment Date ------------------ */}
                             <div className="mb-2 date_input">
                                 <p className='mb-1'>From Enrollment Date</p>
                                     <Controller
@@ -32,7 +32,7 @@ const Search = () => {
                                         )}
                                     />
                             </div>
-                          {/* ------------------ Product Price ------------------ */}
+                          {/* ------------------ To Enrollment Date ------------------ */}
                            <div className="mb-2">
                                 <p className='mb-1'>To Enrollment Date</p>
                                     <Controller
@@ -49,7 +49,7 @@ const Search = () => {
                                         )}
                                     />
                            </div>
-                           {/* ------------------ Product Quantity ------------------ */}
+                           {/* ------------------ Skill ------------------ */}
                            <div className="mb-2">
                                <p>Skill</p>
                                 <select className='w-48 py-1 border-2 rounded-md' {...register("All")}>
@@ -57,7 +57,7 @@ const Search = () => {
                                     <option value="science">Science</option>
                                 </select>
                            </div>
-                           {/* ------------------ Product Image Link ------------------ */}
+                           {/* ------------------ Bulk Action ------------------ */}
                            <div>
                                 <select className='w-48 mr-1 py-1 border-2 rounded-md' {...register("BulkAction")}>
                                     <option value="bulk action">Bulk Action</option>
