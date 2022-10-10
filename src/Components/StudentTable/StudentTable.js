@@ -1,10 +1,44 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ArrowsUpDownIcon } from '@heroicons/react/24/solid'
-import { EllipsisHorizontalIcon } from '@heroicons/react/24/solid'
 import './StudentTable.css'
+import StudentLIstTable from './StudentLIstTable';
 
 
 const StudentTable = () => {
+
+    const [students, setStudents] = useState([]);
+
+    useEffect(() => {
+        fetch('http://localhost:5000/student-lists')
+            .then(res => res.json())
+            .then(data => setStudents(data))
+    },[])
+
+    
+
+
+    const handleClickDelete = (id) => {
+        const proceed = window.confirm('Are you sure to Delete');
+        const url = `http://localhost:5000/student-lists/${id}`;
+        if(proceed){
+            fetch(url, {
+                method: 'DELETE'
+            })
+            .then(res => res.json())
+            .then(data => {
+                const remain = students.filter(student => student._id !== id);
+                console.log(data, students);
+                setStudents(remain);
+            })
+        }
+    }
+
+
+
+
+    
+
+
     return (
         <div>
             <div className='flex justify-between'>
@@ -32,16 +66,12 @@ const StudentTable = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <th><input type="checkbox"/></th>
-                        <td>1</td>
-                        <td>FirsName + last Name</td>
-                        <td>city name</td>
-                        <td>subjects quantity</td>
-                        <td>live or suspended button</td>
-                        <td>3</td>
-                        <td><EllipsisHorizontalIcon className="h-6 w-6 ml-2 font-bold"/></td>
-                      </tr>
+                    {
+                    students.map(student => <StudentLIstTable 
+                        key={student._id} 
+                        student={student}
+                        handleClickDelete={handleClickDelete}></StudentLIstTable> )
+                    }
                     </tbody>
                 </table>     
             </div>

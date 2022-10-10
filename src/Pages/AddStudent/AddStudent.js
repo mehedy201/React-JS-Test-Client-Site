@@ -9,6 +9,9 @@ import  'react-multiple-select-dropdown-lite/dist/index.css'
 import 'reactjs-popup/dist/index.css';
 import { Switch, DatePicker, Button, Form, Input, Space } from 'antd';
 import 'antd/dist/antd.css';
+import { PlusOutlined } from '@ant-design/icons';
+import { TrashIcon } from '@heroicons/react/24/solid'
+
 
 
 
@@ -30,12 +33,19 @@ const AddStudent = () => {
     let yourtBirthDate = '';
     let birthForForm;
     const birtOfDate = (date, dateString) => {
-        birthForForm = dateString;
+        birthForForm = {dateString};
         yourtBirthDate= parseInt(dateString)
         const first4Str = String(yourtBirthDate).slice(0, 4);
         const nowYourAge = year - Number(first4Str);
         setNewAge(nowYourAge);
+        console.log(birthForForm)
       };
+
+    const [enrol, setEnrol] = useState([])
+    const enrolmentDate = (data, dataString) => {
+        setEnrol(dataString);
+        console.log(enrol)
+    }
 
     //   Is Active switch true fale value get -----------
     let isActiveValue = false;
@@ -47,8 +57,9 @@ const AddStudent = () => {
     
     const { register, formState: { errors }, handleSubmit, control, reset } = useForm();
     const onSubmit = data => {
-        const allData = {data, multiSe, isActiveValue, birthForForm};
-        console.log(data)
+        const allData = { multiSe, isActiveValue, birthForForm, data};
+        console.log(birthForForm);
+        // console.log(data)
         // Send Product Data to server
         fetch('http://localhost:5000/student-list', {
             method: 'POST',
@@ -62,6 +73,7 @@ const AddStudent = () => {
             if(allData.success){
                 alert('Sucess')
                 reset();
+                console.log(allData);
             }
         })
     };
@@ -79,6 +91,7 @@ const AddStudent = () => {
       console.log('Received values of form:', values);
     }
 
+    
 
     return (
         <div className='my-6'>
@@ -182,7 +195,7 @@ const AddStudent = () => {
                                   <DatePicker
                                     placeholderText="Date Widget"
                                     className="input input-bordered input-md w-full"
-                                    onChange={(date) => field.onChange(date)}
+                                    onChange={(dateString) => field.onChange(dateString)}
                                     selected={field.value}
                                   />
                                 )}
@@ -199,7 +212,7 @@ const AddStudent = () => {
                                   <DatePicker
                                     placeholderText="Date Widget"
                                     className="input input-bordered input-md w-full"
-                                    onChange={(date) => field.onChange(date)}
+                                    onChange={(dateString) => field.onChange(dateString)}
                                     selected={field.value}
                                   />
                                 )}
@@ -209,7 +222,7 @@ const AddStudent = () => {
                             <div>
                             <p>Status*</p>
                             <select className='input input-bordered input-md w-full' {...register("status")}>
-                                <option value="Select">status</option>
+                                <option>status</option>
                                 <option value="Live">Live</option>
                                 <option value="Suspended">Suspended</option>
                             </select>
@@ -234,76 +247,62 @@ const AddStudent = () => {
                     <p className='col-span-1 font-bold'>Action</p>
                 </div>
                 <hr />
-
-                {/* <Popup trigger={<button className='btn col-span-1 mt-3'>Add More</button>} position="right center">
-                  <div className='grid grid-cols-6 mt-2 gap-6 w-100'>
-                    <input ref={srRef} placeholder='Sr. No:' name='sr' type="text" className='input input-bordered col-span-1'/>
-                    <input ref={subjectRef} name='subjects' type="text" className='input input-bordered col-span-4'/>
-                    <button onClick={() =>getSubjects()} className='btn col-span-1 mt-3'>Add</button>
-                  </div>
-                </Popup>
-
-                    <div className='grid grid-cols-6 mt-2 gap-6'>
-                       
-                    </div> */}
-                {/* </form> */}
-
-
-
-                <Form name="dynamic_form_nest_item" onFinish={onFinish} autoComplete="off">
-      <Form.List name="users">
-        {(fields, { add, remove }) => (
-          <>
-            {fields.map(({ key, name, ...restField }) => (
-              <Space
-                key={key}
-                style={{
-                  display: 'flex',
-                  marginBottom: 8,
-                }}
-                align="baseline"
-              >
-                <Form.Item
-                  {...restField}
-                  name={[name, 'first']}
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Missing first name',
-                    },
-                  ]}
-                >
-                  <Input placeholder="First Name" />
-                </Form.Item>
-                <Form.Item
-                  {...restField}
-                  name={[name, 'last']}
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Missing last name',
-                    },
-                  ]}
-                >
-                  <Input placeholder="Last Name" />
-                </Form.Item>
-                <MinusCircleOutlined onClick={() => remove(name)} />
-              </Space>
-            ))}
-            <Form.Item>
-              <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
-                Add field
-              </Button>
-            </Form.Item>
-          </>
-        )}
-      </Form.List>
-      <Form.Item>
-        <Button type="primary" htmlType="submit">
-          Submit
-        </Button>
-      </Form.Item>
-    </Form>
+                
+                {/* Add Book Section ---------------------- */}
+                 <Form name="dynamic_form_nest_item" onFinish={onFinish} autoComplete="off">
+                    <Form.List name="users">
+                      {(fields, { add, remove }) => (
+                        <>
+                          {fields.map(({ key, name, ...restField }) => (
+                            <Space
+                              key={key}
+                              style={{
+                                display: 'grid',
+                                gridTemplateColumns: '1fr 4fr 1fr',
+                                marginTop: 8,
+                                marginBottom: 2,
+                              }}
+                              align="baseline"
+                            >
+                              <Form.Item
+                                {...restField}
+                                name={[name, 'sr']}
+                                rules={[
+                                  {
+                                    required: true,
+                                    message: 'Sr. No: missing',
+                                  },
+                                ]}
+                              >
+                                <Input placeholder="Sr. No:"/>
+                              </Form.Item>
+                              <Form.Item
+                                {...restField}
+                                name={[name, 'subject']}
+                                rules={[
+                                  {
+                                    required: true,
+                                    message: 'Subject is missing',
+                                  },
+                                ]}
+                              >
+                                <Input placeholder="Subject"/>
+                              </Form.Item>
+                              <TrashIcon onClick={() => remove(name)} className="ml-6 h-6 w-6 text-red-500 border mr-3 font-bold"/>
+                            </Space>
+                          ))}
+                          <Form.Item>
+                            <Button type="dashed" className='w-6' onClick={() => add()} block icon={<PlusOutlined />}>
+                              Add field
+                            </Button>
+                          </Form.Item>
+                        </>
+                      )}
+                    </Form.List>
+                    {/* <Button type="primary" htmlType="submit">
+                      Submit
+                    </Button>   */}
+                </Form>    
 
                 {/* ------------------ Submit Button ------------------ */}
                 <div className='flex justify-end mt-6'>
